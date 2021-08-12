@@ -156,9 +156,10 @@ fw_create_body <- function() {
                 size = "large",
                 app_info)
     }
-
+    
     return(
         shinydashboard::dashboardBody(
+            fresh::use_theme(create_theme()),
             shiny::tags$head(
                 shiny::tags$style(.framework_css()),
                 shiny::tags$script(.framework_js())),
@@ -170,3 +171,84 @@ fw_create_body <- function() {
         )
     )
 }
+
+create_theme <- function() {
+    theme_settings <- NULL
+    light_blue     <- NULL
+    width          <- NULL
+    dark_bg        <- NULL
+    dark_hover_bg  <- NULL
+    dark_color     <- NULL
+    content_bg     <- NULL
+    box_bg         <- NULL
+    info_box_bg    <- NULL
+    theme_colors_keys <- c("primary_color", "sidebar_background", "sidebar_background_hover",
+                           "sidebar_color", "body_background", "body_box_background",
+                           "body_info_background")
+    
+    if (file.exists("www/periscope_style.yaml")) {
+        theme_settings <- tryCatch({
+            yaml::read_yaml("www/periscope_style.yaml")
+        },
+        
+        error = function(e){
+            warning("Could not parse 'periscope_style.yaml' due to: ", e$message)
+            NULL
+        })
+        
+        if (!is.null(theme_settings)) {
+            for (color in theme_colors_keys) {
+                if (!is_valid_color(theme_settings[[color]])) {
+                    warning(color, " has invalid color value. Setting default color.")
+                    theme_settings[[color]] <- NULL
+                }
+            }
+            
+            light_blue    <- theme_settings[["primary_color"]]
+            width         <- theme_settings[["sidebar_width"]]
+            dark_bg       <- theme_settings[["sidebar_background"]]
+            dark_hover_bg <- theme_settings[["sidebar_background_hover"]]
+            dark_color    <- theme_settings[["sidebar_color"]]
+            content_bg    <- theme_settings[["body_background"]]
+            box_bg        <- theme_settings[["body_box_background"]]
+            info_box_bg   <- theme_settings[["body_info_background"]]
+            if (!is.null(width)) {
+                if (any(!is.numeric(width), width <= 0)) {
+                    warning("'sidebar_width' must be positive value. Setting default value.")
+                }
+                else {
+                    width <- paste0(width, "px")
+                }
+            }
+        }
+    }
+    
+    fresh::create_theme(
+        fresh::adminlte_color(
+            light_blue = light_blue
+        ),
+        fresh::adminlte_sidebar(
+            width = width,
+            dark_bg = dark_bg,
+            dark_hover_bg = dark_hover_bg,
+            dark_color = dark_color
+        ),
+        fresh::adminlte_global(
+            content_bg = content_bg,
+            box_bg = box_bg, 
+            info_box_bg = info_box_bg
+        )
+    )
+}
+
+is_valid_color <- function(color) {
+    tryCatch({
+        col2rgb(color)
+        TRUE
+        },
+        
+        error = function(e) {
+            FALSE
+        })
+}
+

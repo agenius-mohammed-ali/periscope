@@ -29,7 +29,9 @@ Imports:
     ggplot2 (>= 2.2),
     methods,
     utils,
-    htmlwidgets
+    htmlwidgets,
+    fresh,
+    yaml
 RoxygenNote: 7.1.1
 Suggests:
     knitr,

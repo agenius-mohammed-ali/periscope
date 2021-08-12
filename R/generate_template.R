@@ -17,6 +17,7 @@
 #' containing the name of a shiny::icon().
 #' @param leftsidebar whether the left sidebar should be enabled.
 #' @param style list containing application styling properties. By default the skin is blue.
+#' @param custom_theme_file location of custom theme settings yaml file. Default value is NULL.
 #'
 #' @section Name:
 #' The \code{name} directory must not exist in \code{location}.  If the code
@@ -113,7 +114,14 @@
 #' create_new_application(name = 'myblankapp', location = tempdir(), leftsidebar = FALSE)
 #'
 #' @export
-create_new_application <- function(name, location, sampleapp = FALSE, resetbutton = TRUE, rightsidebar = FALSE, leftsidebar = TRUE, style = list(skin = "blue")) {
+create_new_application <- function(name, 
+                                   location, 
+                                   sampleapp = FALSE,
+                                   resetbutton = TRUE,
+                                   rightsidebar = FALSE, 
+                                   leftsidebar = TRUE, 
+                                   style = list(skin = "blue"),
+                                   custom_theme_file = NULL) {
     usersep <- .Platform$file.sep
     newloc <- paste(location, name, sep = usersep)
 
@@ -153,11 +161,21 @@ create_new_application <- function(name, location, sampleapp = FALSE, resetbutto
         }
         
         .create_dirs(newloc, usersep)
-        .copy_fw_files(newloc, usersep, resetbutton, dashboard_plus, leftsidebar, right_sidebar_icon, style)
+        if (!is.null(custom_theme_file)) {
+            if (any(!is.character(custom_theme_file),
+                    length(custom_theme_file) != 1,
+                    custom_theme_file == "",
+                    !file.exists(custom_theme_file))) {
+                warning("'custom_theme_file' must be single character value pointing to valid yaml file location.")
+                custom_theme_file <- NULL
+            }
+        }
+        .copy_fw_files(newloc, usersep, resetbutton, dashboard_plus, leftsidebar, right_sidebar_icon, style, custom_theme_file)
         .copy_program_files(newloc, usersep, sampleapp, resetbutton, leftsidebar, dashboard_plus)
 
         message("Framework creation was successful.")
     }
+    
     invisible(NULL)
 }
 
@@ -185,7 +203,14 @@ create_new_application <- function(name, location, sampleapp = FALSE, resetbutto
 }
 
 # Create Framework Files ----------------------------
-.copy_fw_files <- function(newloc, usersep, resetbutton = TRUE, dashboard_plus = FALSE, leftsidebar = TRUE, right_sidebar_icon = NULL, style = list(skin = "blue")) {
+.copy_fw_files <- function(newloc, 
+                           usersep,
+                           resetbutton = TRUE, 
+                           dashboard_plus = FALSE,
+                           leftsidebar = TRUE, 
+                           right_sidebar_icon = NULL,
+                           style = list(skin = "blue"),
+                           custom_theme_file) {
     files <- c("global.R",
                "server.R")
     if (dashboard_plus) {
@@ -255,6 +280,13 @@ create_new_application <- function(name, location, sampleapp = FALSE, resetbutto
             what = "raw", n = 1e6),
             con = paste(newloc, "www", "img", file, sep = usersep))
     }
+    
+    if (!is.null(custom_theme_file)) {
+       file.copy(custom_theme_file, paste(newloc, "www", "periscope_style.yaml", sep = usersep))
+    }
+    else {# rename
+        create_default_theme_file(paste(newloc, "www", "periscope_style.yaml", sep = usersep))
+    }
 
     return()
 }
@@ -312,4 +344,22 @@ create_new_application <- function(name, location, sampleapp = FALSE, resetbutto
     }
 
     return()
+}
+
+create_default_theme_file <- function(theme_file) {
+    lines <- c("# set pimary status color, that affect the color of header, valueBox, infoBox and box",
+               "primary_color: ",
+               "\n",
+               "# change the default sidebar width, colors:",
+               "## width is numeric value in pixels, must by greater than 0",
+               "sidebar_width: ",
+               "sidebar_background: ",
+               "sidebar_background_hover: ",
+               "sidebar_color: ",
+               "\n",
+               "# change the default width of the body as well as its color:",
+               "body_background: ",
+               "body_box_background: ",
+               "body_info_background: ")
+    writeLines(lines, theme_file) 
 }
