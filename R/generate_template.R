@@ -166,7 +166,7 @@ create_new_application <- function(name,
                     length(custom_theme_file) != 1,
                     custom_theme_file == "",
                     !file.exists(custom_theme_file))) {
-                warning("'custom_theme_file' must be single character value pointing to valid yaml file location.")
+                warning("'custom_theme_file' must be single character value pointing to valid yaml file location. Using default values.")
                 custom_theme_file <- NULL
             }
         }

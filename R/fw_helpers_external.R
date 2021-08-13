@@ -196,7 +196,7 @@ create_theme <- function() {
             NULL
         })
         
-        if (!is.null(theme_settings)) {
+        if (!is.null(theme_settings) && is.list(theme_settings)) {
             for (color in theme_colors_keys) {
                 if (!is_valid_color(theme_settings[[color]])) {
                     warning(color, " has invalid color value. Setting default color.")
