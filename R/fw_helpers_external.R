@@ -206,12 +206,12 @@ create_theme <- function() {
             
             light_blue    <- theme_settings[["primary_color"]]
             width         <- theme_settings[["sidebar_width"]]
-            dark_bg       <- theme_settings[["sidebar_background"]]
-            dark_hover_bg <- theme_settings[["sidebar_background_hover"]]
+            dark_bg       <- theme_settings[["sidebar_background_color"]]
+            dark_hover_bg <- theme_settings[["sidebar_item_background_hover_color"]]
             dark_color    <- theme_settings[["sidebar_color"]]
-            content_bg    <- theme_settings[["body_background"]]
-            box_bg        <- theme_settings[["body_box_background"]]
-            info_box_bg   <- theme_settings[["body_info_background"]]
+            content_bg    <- theme_settings[["body_background_color"]]
+            box_bg        <- theme_settings[["box_background_color"]]
+            info_box_bg   <- theme_settings[["info_box_background_color"]]
             if (!is.null(width)) {
                 if (any(!is.numeric(width), width <= 0)) {
                     warning("'sidebar_width' must be positive value. Setting default value.")
