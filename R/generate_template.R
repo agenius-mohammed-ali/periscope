@@ -348,49 +348,49 @@ create_new_application <- function(name,
 
 create_default_theme_file <- function(theme_file) {
     lines <- c("### primary_color",
-               "# To set primary status color, that affect the color of header, valueBox, infoBox and box",
-               "# Valid possible value are colors names or hex-decimal value (i.e,: \"blue\", \"#086A87\")",
+               "# Sets the primary status color that affects the color of the header, valueBox, infoBox and box.",
+               "# Valid values are names of the color or hex-decimal value of the color (i.e,: \"blue\", \"#086A87\").",
                "# Blank/empty value will use default value",
                "primary_color: \n\n",
                
                
                "# Sidebar variables: change the default sidebar width, colors:",
                "### sidebar_width",
-               "# width is numeric value in pixels, must be greater than 0",
+               "# Width is to be specified as a numeric value in pixels. Must be greater than 0 and include numbers only.",
                "# Valid possible value are 200, 350, 425, ...",
                "# Blank/empty value will use default value",
                "sidebar_width: \n",
                
                "### sidebar_background_color",
-               "# Valid possible value are colors names or hex-decimal value (i.e,: \"blue\", \"#086A87\")",
+               "# Valid values are names of the color or hex-decimal value of the color (i.e,: \"blue\", \"#086A87\").",
                "# Blank/empty value will use default value",
                "sidebar_background_color: \n",
                
                "### sidebar_hover_color",
-               "# Valid possible value are colors names or hex-decimal value (i.e,: \"blue\", \"#086A87\")",
+               "# The color of sidebar menu item upon hovring with mouse.",
+               "# Valid values are names of the color or hex-decimal value of the color (i.e,: \"blue\", \"#086A87\").",
                "# Blank/empty value will use default value",
                "sidebar_hover_color: \n",
                
                "### sidebar_text_color",
-               "# Valid possible value are colors names or hex-decimal value (i.e,: \"blue\", \"#086A87\")",
+               "# Valid values are names of the color or hex-decimal value of the color (i.e,: \"blue\", \"#086A87\").",
                "# Blank/empty value will use default value",
                "sidebar_text_color: \n\n",
                
                "# body variables",
                "### body_background_color",
-               "# change the default width of the body as well as its color:",
-               "# Valid possible value are colors names or hex-decimal value (i.e,: \"blue\", \"#086A87\")",
+               "# Valid values are names of the color or hex-decimal value of the color (i.e,: \"blue\", \"#086A87\").",
                "# Blank/empty value will use default value",
                "body_background_color: \n",
                
                "# boxes variables",
                "### box_background_color",
-               "# Valid possible value are colors names or hex-decimal value (i.e,: \"blue\", \"#086A87\")",
+               "# Valid values are names of the color or hex-decimal value of the color (i.e,: \"blue\", \"#086A87\").",
                "# Blank/empty value will use default value",
                "box_background_color: \n",
                
                "### info_box_background_color",
-               "# Valid possible value are colors names or hex-decimal value (i.e,: \"blue\", \"#086A87\")",
+               "# Valid values are names of the color or hex-decimal value of the color (i.e,: \"blue\", \"#086A87\").",
                "# Blank/empty value will use default value",
                "info_box_background_color: ")
     writeLines(lines, theme_file) 
