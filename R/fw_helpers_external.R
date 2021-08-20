@@ -156,9 +156,10 @@ fw_create_body <- function() {
                 size = "large",
                 app_info)
     }
-
+    
     return(
         shinydashboard::dashboardBody(
+            fresh::use_theme(create_theme()),
             shiny::tags$head(
                 shiny::tags$style(.framework_css()),
                 shiny::tags$script(.framework_js())),
@@ -170,3 +171,82 @@ fw_create_body <- function() {
         )
     )
 }
+
+create_theme <- function() {
+    theme_settings            <- NULL
+    primary_color             <- NULL
+    sidebar_width             <- NULL
+    sidebar_background_color  <- NULL
+    sidebar_hover_color       <- NULL
+    sidebar_text_color        <- NULL
+    body_background_color     <- NULL
+    box_background_color      <- NULL
+    info_box_background_color <- NULL
+    theme_colors_keys         <- c("primary_color", "sidebar_background", "sidebar_background_hover",
+                                   "sidebar_color", "body_background", "body_box_background",
+                                   "body_info_background")
+    
+    if (file.exists("www/periscope_style.yaml")) {
+        theme_settings <- tryCatch({
+            yaml::read_yaml("www/periscope_style.yaml")
+        },
+        error = function(e){
+            warning("Could not parse 'periscope_style.yaml' due to: ", e$message)
+            NULL
+        })
+        
+        if (!is.null(theme_settings) && is.list(theme_settings)) {
+            for (color in theme_colors_keys) {
+                if (!is_valid_color(theme_settings[[color]])) {
+                    warning(color, " has invalid color value. Setting default color.")
+                    theme_settings[[color]] <- NULL
+                }
+            }
+            
+            primary_color    <- theme_settings[["primary_color"]]
+            sidebar_width         <- theme_settings[["sidebar_width"]]
+            sidebar_background_color       <- theme_settings[["sidebar_background_color"]]
+            sidebar_hover_color <- theme_settings[["sidebar_hover_color"]]
+            sidebar_text_color    <- theme_settings[["sidebar_text_color"]]
+            body_background_color    <- theme_settings[["body_background_color"]]
+            box_background_color        <- theme_settings[["box_background_color"]]
+            info_box_background_color   <- theme_settings[["info_box_background_color"]]
+            if (!is.null(sidebar_width)) {
+                if (any(!is.numeric(sidebar_width), sidebar_width <= 0)) {
+                    warning("'sidebar_width' must be positive value. Setting default value.")
+                }
+                else {
+                    sidebar_width <- paste0(sidebar_width, "px")
+                }
+            }
+        }
+    }
+    
+    fresh::create_theme(
+        fresh::adminlte_color(
+            light_blue = primary_color
+        ),
+        fresh::adminlte_sidebar(
+            width = sidebar_width,
+            dark_bg = sidebar_background_color,
+            dark_hover_bg = sidebar_hover_color,
+            dark_color = sidebar_text_color
+        ),
+        fresh::adminlte_global(
+            content_bg = body_background_color,
+            box_bg = box_background_color, 
+            info_box_bg = info_box_background_color
+        )
+    )
+}
+
+is_valid_color <- function(color) {
+    tryCatch({
+        col2rgb(color)
+        TRUE
+        },
+        error = function(e) {
+            FALSE
+        })
+}
+
