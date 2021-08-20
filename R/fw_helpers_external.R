@@ -173,24 +173,23 @@ fw_create_body <- function() {
 }
 
 create_theme <- function() {
-    theme_settings <- NULL
-    light_blue     <- NULL
-    width          <- NULL
-    dark_bg        <- NULL
-    dark_hover_bg  <- NULL
-    dark_color     <- NULL
-    content_bg     <- NULL
-    box_bg         <- NULL
-    info_box_bg    <- NULL
-    theme_colors_keys <- c("primary_color", "sidebar_background", "sidebar_background_hover",
-                           "sidebar_color", "body_background", "body_box_background",
-                           "body_info_background")
+    theme_settings            <- NULL
+    primary_color             <- NULL
+    sidebar_width             <- NULL
+    sidebar_background_color  <- NULL
+    sidebar_hover_color       <- NULL
+    sidebar_text_color        <- NULL
+    body_background_color     <- NULL
+    box_background_color      <- NULL
+    info_box_background_color <- NULL
+    theme_colors_keys         <- c("primary_color", "sidebar_background", "sidebar_background_hover",
+                                   "sidebar_color", "body_background", "body_box_background",
+                                   "body_info_background")
     
     if (file.exists("www/periscope_style.yaml")) {
         theme_settings <- tryCatch({
             yaml::read_yaml("www/periscope_style.yaml")
         },
-        
         error = function(e){
             warning("Could not parse 'periscope_style.yaml' due to: ", e$message)
             NULL
@@ -204,20 +203,20 @@ create_theme <- function() {
                 }
             }
             
-            light_blue    <- theme_settings[["primary_color"]]
-            width         <- theme_settings[["sidebar_width"]]
-            dark_bg       <- theme_settings[["sidebar_background_color"]]
-            dark_hover_bg <- theme_settings[["sidebar_hover_color"]]
-            dark_color    <- theme_settings[["sidebar_text_color"]]
-            content_bg    <- theme_settings[["body_background_color"]]
-            box_bg        <- theme_settings[["box_background_color"]]
-            info_box_bg   <- theme_settings[["info_box_background_color"]]
-            if (!is.null(width)) {
-                if (any(!is.numeric(width), width <= 0)) {
+            primary_color    <- theme_settings[["primary_color"]]
+            sidebar_width         <- theme_settings[["sidebar_width"]]
+            sidebar_background_color       <- theme_settings[["sidebar_background_color"]]
+            sidebar_hover_color <- theme_settings[["sidebar_hover_color"]]
+            sidebar_text_color    <- theme_settings[["sidebar_text_color"]]
+            body_background_color    <- theme_settings[["body_background_color"]]
+            box_background_color        <- theme_settings[["box_background_color"]]
+            info_box_background_color   <- theme_settings[["info_box_background_color"]]
+            if (!is.null(sidebar_width)) {
+                if (any(!is.numeric(sidebar_width), sidebar_width <= 0)) {
                     warning("'sidebar_width' must be positive value. Setting default value.")
                 }
                 else {
-                    width <- paste0(width, "px")
+                    sidebar_width <- paste0(sidebar_width, "px")
                 }
             }
         }
@@ -225,18 +224,18 @@ create_theme <- function() {
     
     fresh::create_theme(
         fresh::adminlte_color(
-            light_blue = light_blue
+            light_blue = primary_color
         ),
         fresh::adminlte_sidebar(
-            width = width,
-            dark_bg = dark_bg,
-            dark_hover_bg = dark_hover_bg,
-            dark_color = dark_color
+            width = sidebar_width,
+            dark_bg = sidebar_background_color,
+            dark_hover_bg = sidebar_hover_color,
+            dark_color = sidebar_text_color
         ),
         fresh::adminlte_global(
-            content_bg = content_bg,
-            box_bg = box_bg, 
-            info_box_bg = info_box_bg
+            content_bg = body_background_color,
+            box_bg = box_background_color, 
+            info_box_bg = info_box_background_color
         )
     )
 }
@@ -246,7 +245,6 @@ is_valid_color <- function(color) {
         col2rgb(color)
         TRUE
         },
-        
         error = function(e) {
             FALSE
         })
