@@ -366,15 +366,15 @@ create_default_theme_file <- function(theme_file) {
                "# Blank/empty value will use default value",
                "sidebar_background_color: \n",
                
-               "### sidebar_item_background_hover_color",
+               "### sidebar_hover_color",
                "# Valid possible value are colors names or hex-decimal value (i.e,: \"blue\", \"#086A87\")",
                "# Blank/empty value will use default value",
-               "sidebar_item_background_hover_color: \n",
+               "sidebar_hover_color: \n",
                
-               "### sidebar_color",
+               "### sidebar_text_color",
                "# Valid possible value are colors names or hex-decimal value (i.e,: \"blue\", \"#086A87\")",
                "# Blank/empty value will use default value",
-               "sidebar_color: \n\n",
+               "sidebar_text_color: \n\n",
                
                "# body variables",
                "### body_background_color",
