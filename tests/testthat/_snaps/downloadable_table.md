@@ -98,5 +98,6 @@
 # format_columns
 
     Code
-      format_columns(DT::datatable(dt), list(formatCurrency = list(columns = c("A", "C")), formatPercentage = list(columns = c("D"), 2)))
+      format_columns(DT::datatable(dt), list(formatCurrency = list(columns = c("A",
+        "C")), formatPercentage = list(columns = c("D"), 2)))
 
